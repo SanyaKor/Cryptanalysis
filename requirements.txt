@@ -1,8 +1,5 @@
-IPython==9.2.0
-import_ipynb==0.2
 importlib
 nbformat==5.10.4
 numpy==2.2.6
-pandas==2.2.3
 re
 sympy==1.14.0
