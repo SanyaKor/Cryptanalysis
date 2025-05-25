@@ -1,4 +1,8 @@
 importlib
+lattice_methods
 nbformat==5.10.4
 numpy==2.2.6
+os
+pandas==2.2.3
 sympy==1.14.0
+
