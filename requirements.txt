@@ -1,5 +1,4 @@
 importlib
 nbformat==5.10.4
 numpy==2.2.6
-re
 sympy==1.14.0
