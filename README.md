@@ -4,6 +4,7 @@
 ![Jupyter](https://img.shields.io/badge/jupyter-notebooks-orange)
 ![Repo Size](https://img.shields.io/github/repo-size/SanyaKor/Cryptanalysis)
 ![Last Commit](https://img.shields.io/github/last-commit/SanyaKor/Cryptanalysis)
+![Build](https://github.com/SanyaKor/Cryptanalysis/actions/workflows/build.yml/badge.svg)
 
 This project provides clean and minimal implementations of key lattice-based cryptographic algorithms, including:
 
