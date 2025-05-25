@@ -23,5 +23,7 @@ jobs:
         pip install -r requirements.txt
         pip install nbconvert nbformat ipykernel
 
-    - name: ✅ Check importability
-      run: python -c "import lattice_methods"
+    - name: ✅ Check import
+      run: |
+        python -c "import lattice_methods"
+        python -c "import tests"

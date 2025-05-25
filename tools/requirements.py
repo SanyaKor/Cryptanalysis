@@ -4,6 +4,11 @@ import importlib.metadata
 import os
 
 EXCLUDED_LIBS = {
+    "lattice_methods",
+    "tests",
+    "os",
+    "re",
+    "importlib"
 }
 
 IMPORT_RE = re.compile(r'^\s*(?:import|from)\s+([a-zA-Z_][\w]*)')
