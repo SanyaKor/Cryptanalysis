@@ -14,18 +14,17 @@ for practical demonstrations of lattice reduction functions (`reduce_2d_basis`, 
 
 ### 📚 References
 
-- **Trappe, W., & Washington, L. C.**  
-  *Introduction to Cryptography with Coding Theory*, 2nd Edition. Pearson, 2006.
+- **Introduction to Cryptography with Coding Theory**  
+  Trappe, W., & Washington, L. C. — 2nd Edition, Pearson, 2006.
 
-- **Hoffstein, J., Pipher, J., & Silverman, J. H.**  
-  *NTRU: A Ring-Based Public Key Cryptosystem*, 1998.  
+- **NTRU: A Ring-Based Public Key Cryptosystem**  
+  Hoffstein, J., Pipher, J., & Silverman, J. H., 1998.  
   [https://ntru.org](https://ntru.org)
 
-- **Wikipedia**  
-  *Lenstra–Lenstra–Lovász lattice basis reduction algorithm*  
-  [Wikipedia article](https://en.wikipedia.org/wiki/Lenstra%E2%80%93Lenstra%E2%80%93Lov%C3%A1sz_lattice_basis_reduction_algorithm)
+- **Lenstra–Lenstra–Lovász lattice basis reduction algorithm**  
+  Wikipedia Article.  
+  [https://en.wikipedia.org/wiki/Lenstra%E2%80%93Lenstra%E2%80%93Lov%C3%A1sz_lattice_basis_reduction_algorithm](https://en.wikipedia.org/wiki/Lenstra%E2%80%93Lenstra%E2%80%93Lov%C3%A1sz_lattice_basis_reduction_algorithm)
 
-- **Tengely, Sz.**  
-  *Public Key Cryptography – NTRU*  
-  Example values and explanation used in this notebook are based on the example at:  
-  [https://shrek.unideb.hu/~tengely/crypto/section-8.html](https://shrek.unideb.hu/~tengely/crypto/section-8.html)
+- **Public Key Cryptography – NTRU**  
+  Tengely, Sz. — Example values used in this notebook are based on:  
+  [https://shrek.unideb.hu/~tengely/crypto/section-8.html](https://shrek.unideb.hu/~tengely/crypto/section-8.html)/~tengely/crypto/section-8.html](https://shrek.unideb.hu/~tengely/crypto/section-8.html)
