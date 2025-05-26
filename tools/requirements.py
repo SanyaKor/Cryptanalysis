@@ -8,7 +8,8 @@ EXCLUDED_LIBS = {
     "tests",
     "os",
     "re",
-    "importlib"
+    "importlib",
+    "setuptools"
 }
 
 IMPORT_RE = re.compile(r'^\s*(?:import|from)\s+([a-zA-Z_][\w]*)')

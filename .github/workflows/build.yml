@@ -28,9 +28,7 @@ jobs:
         python -c "import lattice_methods"
         python -c "import tests"
 
-    - name: Execute all notebooks via nbconvert
+    - name: Execute all notebooks
       run: |
-        pip install nbconvert
-        for nb in notebooks/*.ipynb; do
-          jupyter nbconvert --to notebook --execute "$nb" --output /dev/null
-        done
+        pip install pytest nbval
+        pytest --nbval-lax notebooks/

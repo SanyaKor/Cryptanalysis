@@ -16,3 +16,5 @@ __all__ = [
     "ntru_generate_keys"
 ]
 
+__version__ = "0.1.0"
+
