@@ -1,0 +1,11 @@
+# macOS system file
+.DS_Store
+
+# PyCharm project folder
+.idea/
+
+# Virtual environments
+.venv/
+venv/
+
+__pycache__/
