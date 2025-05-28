@@ -1,4 +1,4 @@
-from sympy import Poly, symbols, invert, ZZ, gcd, GF
+from sympy import Poly, symbols, invert, ZZ, gcd, GF, isprime
 import numpy as np
 
 x = symbols('x')
@@ -7,7 +7,12 @@ x = symbols('x')
 def invert_poly(polynomial_f, N, q):
 
     #f = Poly(f_coeffs, x, domain=GF(q))
-    mod_poly = Poly(x**N - 1, x, domain=GF(q))
+    if(isprime(q)):
+        mod_poly = Poly(x**N - 1, x, domain=GF(q))
+    else:
+        mod_poly = Poly(x ** N - 1, x, domain=ZZ).trunc(q)
+
+    polynomial_f = polynomial_f.set_domain(mod_poly.domain)
 
     if gcd(polynomial_f, mod_poly).degree() != 0:
         return None
@@ -70,8 +75,11 @@ def ntru_generate_keys(N : int, p: int, q : int, polynomial_g : Poly, polynomial
         print("ERROR SMTH WRONG WITH p, q ")
         return
 
+    if(isprime(q)):
+        poly_f_over_q = Poly(polynomial_f, x, domain=GF(q))
+    else:
+        poly_f_over_q = Poly(polynomial_f, x, domain=ZZ).trunc(q)
 
-    poly_f_over_q = Poly(polynomial_f, x, domain=GF(q))
     poly_f_over_p = Poly(polynomial_f, x, domain=GF(p))
 
     Fp = invert_poly(poly_f_over_p, N, p)

@@ -58,3 +58,6 @@ contains solved exercises from *Introduction to Cryptography with Coding Theory*
   Tengely, Sz. — Example values used in this notebook are based on:  
   [https://shrek.unideb.hu/~tengely/crypto/section-8.html](https://shrek.unideb.hu/~tengely/crypto/section-8.html))
 
+- **Applied Cryptanalysis: Breaking Ciphers in the Real World**  
+  Mark Stamp, Richard M. Low — Wiley-IEEE Press, 2007.  
+  Chapter 6.7  
