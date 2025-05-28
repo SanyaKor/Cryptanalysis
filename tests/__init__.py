@@ -1,5 +1,5 @@
-from .tests_br2d import tests_br2d
 from .utils import generate_random_bases
-from .tests_lll import tests_brlll
+from .t_br2d import t_br2d
+from .t_brlll import t_brlll
 
 __version__ = "0.1.0"

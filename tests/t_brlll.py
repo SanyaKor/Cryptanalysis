@@ -2,7 +2,7 @@ from lattice_methods.lll import lll_reduce
 from lattice_methods.utils import are_bases_equivalent
 import numpy as np
 
-def tests_brlll(basis_list, verbose=False):
+def t_brlll(basis_list, verbose=False):
 
     tests_amount = len(basis_list)
     tests_passed = 0

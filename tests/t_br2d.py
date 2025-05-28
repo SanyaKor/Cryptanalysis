@@ -4,7 +4,7 @@ import numpy as np
 
 
 
-def tests_br2d(basis_list, verbose=False):
+def t_br2d(basis_list, verbose=False):
 
     tests_amount = len(basis_list)
     tests_passed = 0
