@@ -2,6 +2,8 @@ from lattice_methods.basis_reduction_2d import reduce_2d_basis
 from lattice_methods.utils import are_bases_equivalent
 import numpy as np
 
+
+
 def tests_br2d(basis_list, verbose=False):
 
     tests_amount = len(basis_list)
@@ -47,3 +49,4 @@ def tests_br2d(basis_list, verbose=False):
         print(f"\n📊 {tests_amount}/{tests_passed} tests passed.")
 
     return results
+
