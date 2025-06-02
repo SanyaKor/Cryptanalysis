@@ -3,7 +3,25 @@ from lattice_methods.utils import are_bases_equivalent
 import numpy as np
 
 def tests_br2d(basis_list, verbose=False):
+    """
+        Performs batch testing of 2D lattice basis reduction.
 
+        This function takes a list of 2D lattice bases, applies the `reduce_2d_basis` algorithm to each pair,
+        and verifies two conditions for each reduction:
+          1. The reduced basis is equivalent to the original basis.
+          2. The shorter vector in the reduced basis is no longer than in the original.
+
+        A test is marked as passed only if both conditions hold.
+
+        :param basis_list: List of 2D lattice bases. Each element is a pair of vectors (b1, b2), where b1 and b2 are NumPy arrays.
+        :type basis_list: list[tuple[np.ndarray, np.ndarray]]
+
+        :param verbose: Whether to print detailed output for each test.
+        :type verbose: bool
+
+        :return: List of test results. Each result is a dict with reduced vectors and a pass/fail flag.
+        :rtype: list[dict[str, Any]]
+    """
     tests_amount = len(basis_list)
     tests_passed = 0
 
