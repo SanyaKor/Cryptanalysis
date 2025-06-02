@@ -705,13 +705,296 @@ Given method transforms the modular equation \( f(T) \equiv 0 \pmod{n} \) into a
  This attack method is based on the description from the book \textit{Introduction to Cryptography with Coding Theory} by Trappe and Washington (2nd Edition, Pearson, 2006). An example implementation of this attack has been developed and published by the author on GitHub: \href{https://github.com/SanyaKor/Cryptanalysis/blob/main/notebooks/lll\_attack.ipynb}{github.com/SanyaKor/Cryptanalysis/blob/main/notebooks/lll\_attack.ipynb}.
 \newpage
 
+\subsection{NTRU}
+
+Lattice-based cryptography becomes especially powerful in high-dimensional settings. While traditional reduction techniques like the \textsc{LLL} algorithm lose their effectiveness as the dimension \( n \) increases (typically beyond \( n \geq 100 \)), this limitation opens the door for new constructions that rely on the hardness of certain lattice problems.
+
+One of the most prominent lattice-based cryptosystems is \textsc{NTRU}, a public-key encryption scheme known for its efficiency and resistance to quantum attacks. Although its original formulation did not explicitly reference lattices, it can be naturally interpreted through a lattice framework—a perspective we will explore in this chapter.
+
+\bigskip
+
+\subsection*{Preliminaries for NTRU}
+Before presenting the structure of the NTRU cryptosystem, we introduce a few algebraic preliminaries.
+
+We work with polynomials of degree less than \( N \), with coefficients in the ring \( \mathbb{Z}_q \). Let
+
+\[
+f(x) = \sum_{i=0}^{N-1} a_i x^i, \qquad g(x) = \sum_{i=0}^{N-1} b_i x^i
+\]
+
+be two such polynomials. Their ordinary (non-reduced) product over \( \mathbb{Z} \) is given by:
+
+\[
+(f * g)(x) = \sum_{k=0}^{2N-2} \left( \sum_{i=0}^k a_i b_{k-i} \right) x^k.
+\]
+
+However, NTRU operates in the quotient ring \( \mathbb{Z}_q[x]/(x^N - 1) \), where coefficients are reduced modulo \( q \), and the exponents wrap around modulo \( N \). In this ring, polynomial multiplication becomes
+
+\[
+(f \ast g)(x) = \sum_{i=0}^{N-1} c_i x^i, \qquad \text{where } c_i = \sum_{\substack{j + k \equiv i \!\!\!\! \pmod{N}}} a_j b_k \pmod{q}.
+\]
+
+This cyclic convolution is fundamental to the design and efficiency of the NTRU cryptosystem.
+
+\medskip
+\begin{example}
+Let \( N = 3 \), and consider the polynomials
+\[
+f(x) = x^2 + 7x + 9, \qquad g(x) = 3x^2 + 2x + 5.
+\]
+We compute their cyclic convolution product \( f \ast g \) in \( \mathbb{Z}[x]/(x^3 - 1) \). The coefficient \( c_1 \) of \( x \) is
+
+\[
+c_1 = a_0 b_1 + a_1 b_0 + a_2 b_2 = 9 \cdot 2 + 7 \cdot 5 + 1 \cdot 3 = 56,
+\]
+
+and the full product is
+
+\[
+f \ast g = 46x^2 + 56x + 68.
+\]
+\end{example}
+
+\smallskip
+\noindent
+An implementation of this polynomial multiplication is available on GitHub:  
+\href{https://github.com/SanyaKor/Cryptanalysis/blob/main/lattice\_methods/ntru.py}{\texttt{github.com/SanyaKor/Cryptanalysis/blob/main/lattice\_methods/ntru.py}}
+
+\smallskip
+\noindent\textbf{Addition.}
+Given two polynomials
+\[
+f(x) = \sum_{i=0}^{N-1} a_i x^i, \quad g(x) = \sum_{i=0}^{N-1} b_i x^i,
+\]
+their sum in \( \mathbb{Z}_q[x]/(x^N - 1) \) is defined coefficient-wise:
+\[
+(f + g)(x) = \sum_{i=0}^{N-1} (a_i + b_i \bmod q)\, x^i.
+\]
+This operation is straightforward and preserves the ring structure.
+
+
+\medskip
+\noindent
+NTRU works with a specific subset of polynomials that have small integer coefficients. To formalize this, we define a family of sets:
+
+\[
+\mathcal{L}(j, k) = 
+\left\{
+  \begin{array}{l}
+    \text{the set of polynomials of degree } < N \text{ with} \\
+    j \text{ coefficients equal to } +1,\ k \text{ coefficients equal to } -1, \\
+    \text{and all other coefficients equal to } 0.
+  \end{array}
+\right.
+\]
+The remaining coefficients are set to zero.
+
+\medskip
+
+\noindent
+We are now ready to describe the NTRU cryptosystem. Suppose Alice wishes to send a message to Bob. To begin, Bob must generate and publish a public key. He selects three integers \( N, p, q \), subject to the constraints:
+\[
+\gcd(p, q) = 1, \quad \text{and} \quad p \ll q.
+\]
+Recommended parameters for moderate security include:
+\[
+(N, p, q) = (107, 3, 64),
+\]
+and for higher security:
+\[
+(N, p, q) = (503, 3, 256).
+\]
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{Case} & \textbf{Level} & \boldmath$N$ & \boldmath$p$ & \boldmath$q$ & \textbf{Time (seconds)} \\
+\hline
+A & Moderate & 107 & 3 & 64 & $780,\!230$ (9 days) \\
+\hline
+B & High & 167 & 3 & 128 & $1.198 \cdot 10^{10}$ (380 years) \\
+\hline
+C & Highest & 503 & 3 & 256 & $1.969 \cdot 10^{35}$ ($6.2 \cdot 10^{27}$ years) \\
+\hline
+\end{tabular}
+\end{table}
+
+NTRU Parameter Sets and Estimated Attack Times. Based on data from \url{https://www.ntru.org/}. Tests were performed on a 200 MHz Pentium Pro processor.
+
+\newpage
+
+To initiate the cryptosystem, Bob begins by selecting two small polynomials \( f \) and \( g \), typically with coefficients in \(\{-1, 0, 1\}\). These polynomials are chosen such that \( f \) is invertible modulo both \( p \) and \( q \). This means there exist polynomials \( F_p \) and \( F_q \), each of degree less than \( N \), such that
+
+\[
+F_p * f \equiv 1 \pmod{p}, \qquad F_q * f \equiv 1 \pmod{q}.
+\]
+
+Using these, Bob computes the public key polynomial
+
+\[
+h \equiv F_q * g \pmod{q},
+\]
+
+and publishes the tuple \( (N, p, q, h) \) as his public key.
+
+\medskip
+
+The private key is the polynomial \( f \), which should be kept secret. Although \( F_p \) can be efficiently recomputed from \( f \), it is recommended to store it for faster decryption. As for \( g \), note that since \( g \equiv f * h \pmod{q} \), all required information is contained in \( f \) and \( h \), so storing \( g \) is unnecessary.
+
+
+\subsection*{Encryption and Decryption in NTRU}
+
+Once the keys are established, Alice can encrypt a message for Bob. She encodes her message as a polynomial \( m \) of degree less than \( N \), with coefficients from \( \{ -1, 0, 1 \} \), assuming \( p = 3 \). Then she chooses a small random polynomial \( \phi \) (its precise constraints will be detailed later) and computes the ciphertext as
+
+\[
+c \equiv p\phi * h + m \pmod{q}.
+\]
+
+This ciphertext \( c \) is sent to Bob.
+
+\medskip
+
+To decrypt the message, Bob first computes
+
+\[
+a \equiv f * c \pmod{q}.
+\]
+
+If all coefficients of \( a \) have absolute value less than \( q/2 \), he can recover the original message by reducing modulo \( p \):
+
+\[
+m \equiv F_p * a \pmod{p}.
+\]
+
+
+Although decryption is not always guaranteed to succeed, appropriate parameter choices yield very low failure probabilities (e.g., less than \( 5 \times 10^{-5} \)).
+
+Here’s a sketch of why decryption usually works:
+
+\[
+a \equiv f * c \equiv f * (p\phi * h + m) \equiv f * p\phi * F_q * g + f * m \equiv p\phi * g + f * m \pmod{q}.
+\]
+
+Given that \( \phi, g, f, m \) all have small coefficients and \( p \ll q \), it is likely that the result does not wrap modulo \( q \), so we can treat the expression as:
+
+\[
+a = p\phi * g + f * m.
+\]
+
+Applying \( F_p \), we have:
+
+\[
+F_p * a = pF_p * \phi * g + F_p * f * m \equiv 0 + 1 * m \equiv m \pmod{p},
+\]
+
+which successfully recovers the message \( m \).
+
+
+
+
+\medskip
+
+A complete implementation of the NTRU cryptosystem, including key generation, encryption, and decryption, is available on GitHub:  
+\href{https://github.com/SanyaKor/Cryptanalysis/blob/main/lattice\_methods/ntru.py}{\texttt{github.com/SanyaKor/Cryptanalysis/blob/main/lattice\_methods/ntru.py}}
+
+\smallskip
+
+An example demonstrating how to use the NTRU scheme in practice can be found at:  
+\href{https://github.com/SanyaKor/Cryptanalysis/blob/main/notebooks/usage_examples.ipynb}{\texttt{notebooks/usage\_examples.ipynb}}
+
+\medskip
+
+\subsection*{Advantages and Disadvantages of NTRU}
+
+\textbf{Advantages:}
+\begin{itemize}
+  \item \textit{Efficiency:} NTRU offers fast key generation, encryption, and decryption compared to many other public-key schemes.
+  \item \textit{Small Key Sizes:} Public and private keys are relatively small, making NTRU attractive for constrained environments.
+  \item \textit{Post-Quantum Security:} NTRU is believed to be resistant to attacks by quantum computers, unlike RSA or ECC.
+\end{itemize}
+
+\textbf{Disadvantages:}
+\begin{itemize}
+  \item \textit{Decryption Failures:} With improper parameters, decryption can fail. Careful tuning is required.
+  \item \textit{Parameter Sensitivity:} Security and correctness heavily depend on choosing parameters properly.
+  \item \textit{Lattice Attacks:} Though generally secure, NTRU remains susceptible to advanced lattice-based attacks if parameters are too weak.
+\end{itemize}
+
+\newpage
+
+\subsection{Attack on NTRU}
+
+Let \( h = h_{N-1}X^{N-1} + \cdots + h_0 \). Form the \( N \times N \) matrix
+\[
+H = 
+\begin{pmatrix}
+h_0     & h_1     & \cdots & h_{N-1} \\
+h_{N-1} & h_0     & \cdots & h_{N-2} \\
+\vdots  & \vdots  & \ddots & \vdots  \\
+h_1     & h_2     & \cdots & h_0
+\end{pmatrix}.
+\]
+
+If we represent the polynomials \( f = f_{N-1}X^{N-1} + \cdots + f_0 \) and \( g = g_{N-1}X^{N-1} + \cdots + g_0 \) by their corresponding row vectors:
+\[
+\vec{f} = (f_0, \dots, f_{N-1}), \quad \vec{g} = (g_0, \dots, g_{N-1}),
+\]
+then multiplication in \( \mathbb{Z}_q[x]/(x^N - 1) \) can be viewed as matrix-vector multiplication \( H \cdot \vec{f} \).
+
+\vspace{0.5em}
+
+Here, \( H \) is a circulant matrix generated from the coefficients of \( h \). This form is particularly useful because circulant matrices encode convolution-like operations. When working modulo \( X^N - 1 \), the multiplication of polynomials behaves like cyclic convolution. Representing this operation via matrix multiplication simplifies both notation and implementation, especially in lattice-based cryptographic schemes like NTRU.
+
+
+We observe that
+\[
+\vec{f} H \equiv \vec{g} \pmod{q}.
+\]
+
+To express this relationship as a lattice problem, define the identity matrix \( I \) and the scaled identity matrix \( qI \) as:
+\[
+I =
+\begin{pmatrix}
+1 & 0 & \cdots & 0 \\
+0 & 1 & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & 1
+\end{pmatrix}, \qquad
+qI =
+\begin{pmatrix}
+q & 0 & \cdots & 0 \\
+0 & q & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & q
+\end{pmatrix}.
+\]
+
+Now form the \( 2N \times 2N \) matrix \( M \) by:
+\[
+M = 
+\begin{pmatrix}
+I & H \\
+0 & qI
+\end{pmatrix}.
+\]
+
+Let \( y \) be an unknown polynomial of degree less than \( N \), with coefficient vector \( \vec{y} \). Then we can express the relation
+\[
+g = f * h + qy
+\]
+as
+\[
+(\vec{f}, \vec{y}) M = (\vec{f}, \vec{g}).
+\]
+
+This means the vector \( (\vec{f}, \vec{g}) \) belongs to the lattice \( L \) generated by the rows of \( M \). Because \( f \) and \( g \) have small coefficients, the corresponding vector is short. An attacker can apply lattice reduction techniques (like the LLL algorithm) to search for short vectors in \( L \), and potentially recover \( f \) and \( g \), thus compromising the cryptosystem.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\newpage
 \section{Code}
-This section documents the source code modules that implement the main functionality of the project.  
-It includes core algorithms for lattice manipulation, polynomial arithmetic, cryptographic operations,  
+This section provides an overview of the source code modules responsible for implementing the core functionality of the project.It includes core algorithms for lattice manipulation, polynomial arithmetic, cryptographic operations,  
 and supporting utilities such as testing and verification routines.
 
 Each file is presented with its key functions, their parameters, return types, and the full implementation  
@@ -2193,6 +2476,8 @@ Edition \textbf{Publisher:} Pearson, 2006
 
 \newpage
 \section{Conlusion}
+
+This project explored key techniques in lattice-based cryptography. We started with two-dimensional basis reduction and then applied the LLL algorithm to higher-dimensional problems. Using these tools, we analyzed two attacks: one on RSA with partial message leakage, and another on NTRU, where short vectors reveal secret keys. The practical examples showed how lattice reduction helps uncover hidden information when parameters are weak. Through both theory and implementation, we saw how powerful and versatile lattice methods are in modern cryptography.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
