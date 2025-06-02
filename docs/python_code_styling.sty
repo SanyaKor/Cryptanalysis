@@ -1,0 +1,32 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{py_listing}[2025/06/01 Python listing preset with layout]
+
+% Стандартные настройки документа
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{geometry}
+\geometry{margin=2.5cm}
+
+% Цвет и listings
+\RequirePackage{xcolor}
+\RequirePackage{listings}
+
+% Стилизация Python кода
+\lstdefinestyle{pylistingstyle}{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{orange},
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    numbersep=5pt,
+    frame=single,
+    breaklines=true,
+    tabsize=4,
+    showstringspaces=false,
+    captionpos=b,
+    morekeywords={np, plt}
+}
+
+\lstset{style=pylistingstyle}
