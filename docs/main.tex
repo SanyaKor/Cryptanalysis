@@ -16,6 +16,14 @@
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 \usepackage{mathtools}
+\usepackage{setspace}
+\usepackage{titling}
+\usepackage{fancyhdr}
+\usepackage[english, ngerman]{babel}
+
+\geometry{top=2cm, bottom=2.5cm, left=3cm, right=2cm}
+\setlength{\droptitle}{-4em}
+\onehalfspacing
 \usetikzlibrary{positioning, arrows.meta, shapes, decorations.pathreplacing}
 
 
@@ -28,10 +36,49 @@
 
 \begin{document}
 
+\begin{titlepage}
+    \begin{center}
+        \includegraphics[width=0.25\textwidth]{Logo-hsmw.png}\\[0.5cm]
+
+        \selectlanguage{ngerman}
+        \Large % optional logo
+            
+        \textbf{HOCHSCHULE MITTWEIDA}\\[0.5cm]
+        \textbf{Fakultät Angewandte Computer- und Biowissenschaften}\\[0.3cm]
+        \textbf{Masterstudiengang Applied Mathematics for Network and Data Sciences}\\[1.5cm]
+        
+        \selectlanguage{english}
+        \Large
+        \textbf{Course: Cryptanalysis}\\[0.5cm]
+        \textbf{Project Report}\\[1.5cm]
+        \textbf{Module: Cryptanalysis (H.77186)}\\[0.2cm]
+        \textbf{Summer Semester 2025}\\[1.5cm]
+        
+        \Huge
+        \textbf{Lattice Methods}\\[2cm]
+        
+        \normalsize
+        \begin{tabbing}
+        Author: \textbf{Aleksandr Lebedev}\\
+        Student ID: \textbf{89685}\\
+        Supervisor: \textbf{Prof. Dr. Klaus Dohmen}\\
+		Submission Date: \textbf{\today} \\
+    	GitHub Repository:  \texttt{github.com/SanyaKor/Cryptanalysis}
+        \end{tabbing}
+
+        \vfill
+        
+    \end{center}
+\end{titlepage}
+
+\selectlanguage{english}
 \tableofcontents
 \newpage
 
 \section{Introduction}
+This handout investigates practical techniques in lattice-based cryptanalysis, grounded in the material from Chapter 17 of Introduction to Cryptography with Coding Theory by Trappe and Washington (2nd Edition, Pearson, 2006). The project centers on the Lenstra–Lenstra–Lovász (LLL) algorithm and its applications in attacking public-key cryptosystems when structural or parameter weaknesses are present. We focus on two key cases: a partial-message attack on RSA and a lattice-based key recovery attack on NTRU. These examples show how short vector techniques can expose sensitive information when cryptographic assumptions break down.
+
+The entire project is written in Python. It features a continuous integration (CI) pipeline using GitHub Actions for automated builds. On the main branch, manual unit and integration tests are maintained to verify core functionality. Additionally, there is a dedicated testing branch where full CI/CD is configured with automated pytest runs for deeper coverage and experimentation. All reports and supporting documentation are written in LaTeX, ensuring a structured and professional presentation. While the theoretical foundation follows the referenced textbook, all examples, code, and implementations were developed independently to extend and demonstrate the concepts in practice.
 \newpage
 \section{Mathematical Concepts}
 \subsection{Lattice Methods}
@@ -65,7 +112,7 @@ Then \( \{w_1, w_2\} \) is also a basis of the same lattice.
 
 \begin{figure}[h!]
 \centering
-\begin{tikzpicture}[scale=0.5, >=Stealth]
+\begin{tikzpicture}[scale=0.4, >=Stealth]
 
 \def\vone{{2,1}}
 \def\vtwo{{1,2}}
@@ -703,7 +750,7 @@ Given method transforms the modular equation \( f(T) \equiv 0 \pmod{n} \) into a
 
 
  This attack method is based on the description from the book \textit{Introduction to Cryptography with Coding Theory} by Trappe and Washington (2nd Edition, Pearson, 2006). An example implementation of this attack has been developed and published by the author on GitHub: \href{https://github.com/SanyaKor/Cryptanalysis/blob/main/notebooks/lll\_attack.ipynb}{github.com/SanyaKor/Cryptanalysis/blob/main/notebooks/lll\_attack.ipynb}.
-\newpage
+
 
 \subsection{NTRU}
 
@@ -822,7 +869,6 @@ C & Highest & 503 & 3 & 256 & $1.969 \cdot 10^{35}$ ($6.2 \cdot 10^{27}$ years) 
 
 NTRU Parameter Sets and Estimated Attack Times. Based on data from \url{https://www.ntru.org/}. Tests were performed on a 200 MHz Pentium Pro processor.
 
-\newpage
 
 To initiate the cryptosystem, Bob begins by selecting two small polynomials \( f \) and \( g \), typically with coefficients in \(\{-1, 0, 1\}\). These polynomials are chosen such that \( f \) is invertible modulo both \( p \) and \( q \). This means there exist polynomials \( F_p \) and \( F_q \), each of degree less than \( N \), such that
 
@@ -921,7 +967,6 @@ An example demonstrating how to use the NTRU scheme in practice can be found at:
   \item \textit{Lattice Attacks:} Though generally secure, NTRU remains susceptible to advanced lattice-based attacks if parameters are too weak.
 \end{itemize}
 
-\newpage
 
 \subsection{Attack on NTRU}
 
