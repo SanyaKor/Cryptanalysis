@@ -20,11 +20,39 @@
 \usepackage{titling}
 \usepackage{fancyhdr}
 \usepackage[english, ngerman]{babel}
+\usepackage{fancyhdr}       
+\usepackage{lipsum}          
+\usepackage{titlesec}        
+\usepackage{lastpage} 
+
+
+
+\pagestyle{fancy}            % fancy стиль
+
+% --- Очистим всё ---
+\fancyhf{}
+
+% --- Верхний колонтитул ---
+\fancyhead[L]{\leftmark}     % Слева — название текущего section
+\fancyhead[R]{\thepage}      % По центру — номер страницы
+
+% --- Только верхняя линия ---
+\renewcommand{\headrulewidth}{0.4pt}  % Линия сверху
+\renewcommand{\footrulewidth}{0pt}    % Нет линии снизу
+
+% --- Чтобы \leftmark показывал \section (в article классе) ---
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+
+
+
 
 \geometry{top=2cm, bottom=2.5cm, left=3cm, right=2cm}
 \setlength{\droptitle}{-4em}
 \onehalfspacing
 \usetikzlibrary{positioning, arrows.meta, shapes, decorations.pathreplacing}
+
+
+
 
 
 
@@ -49,7 +77,6 @@
         
         \selectlanguage{english}
         \Large
-        \textbf{Course: Cryptanalysis}\\[0.5cm]
         \textbf{Project Report}\\[1.5cm]
         \textbf{Module: Cryptanalysis (H.77186)}\\[0.2cm]
         \textbf{Summer Semester 2025}\\[1.5cm]
@@ -2557,28 +2584,28 @@ This project explored key techniques in lattice-based cryptography. We started w
 
 \newpage
 \section{References}
-\vspace{0.5em}
-\begin{itemize}
-    \item \textbf{Source Code and Notebooks} \\
+\vspace{0.5em}\begin{enumerate}
+    \item[\textbf{[1]}] \textbf{Source Code and Notebooks} \\
     Complete codebase and usage examples available at: \\
     \url{https://github.com/SanyaKor/Cryptanalysis}
-    \item \textbf{Introduction to Cryptography with Coding Theory} \\
+
+    \item[\textbf{[2]}] \textbf{Introduction to Cryptography with Coding Theory} \\
     W. Trappe, L. C. Washington — 2nd Edition, Pearson, 2006.
 
-    \item \textbf{NTRU: A Ring-Based Public Key Cryptosystem} \\
+    \item[\textbf{[3]}] \textbf{NTRU: A Ring-Based Public Key Cryptosystem} \\
     J. Hoffstein, J. Pipher, J. H. Silverman, 1998. \\
     \url{https://ntru.org}
 
-    \item \textbf{Lenstra--Lenstra--Lovász lattice basis reduction algorithm} \\
+    \item[\textbf{[4]}] \textbf{Lenstra--Lenstra--Lovász lattice basis reduction algorithm} \\
     Wikipedia Article. \\
-\href{https://en.wikipedia.org/wiki/Lenstra%E2%80%93Lenstra%E2%80%93Lov%C3%A1sz_lattice_basis_reduction_algorithm}{Wikipedia}
+    \href{https://en.wikipedia.org/wiki/Lenstra%E2%80%93Lenstra%E2%80%93Lov%C3%A1sz_lattice_basis_reduction_algorithm}{Wikipedia}
 
-    \item \textbf{Public Key Cryptography – NTRU} \\
+    \item[\textbf{[5]}] \textbf{Public Key Cryptography – NTRU} \\
     Sz. Tengely — Example values used in this notebook based on: \\
     \url{https://shrek.unideb.hu/~tengely/crypto/section-8.html}
 
-    \item \textbf{Applied Cryptanalysis: Breaking Ciphers in the Real World} \\
+    \item[\textbf{[6]}] \textbf{Applied Cryptanalysis: Breaking Ciphers in the Real World} \\
     M. Stamp, R. M. Low — Wiley-IEEE Press, 2007. Chapter 6.7.
-\end{itemize}
+\end{enumerate}
 
 \end{document}
